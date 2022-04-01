@@ -1,3 +1,23 @@
+/*Fonction qui teste la position de la boule p dans matBoules 
+Entrees : la matrice de Boules et laz position p de la Boule testee
+Sorties : renvoie Vrai si la Boule de position p est sur un des bords de la matrice de Boules
+				  Faux sinon.*/
+fonction bord(matBulles, Position p){
+
+	let indDebB = 0;
+	let indFinBL = matBulles.length(0) - 1;
+	let indFinBC = matBulles.length(1) - 1;
+	
+	if (p.x != indDebB && p.y != indDebB && 
+		p.x != indFinBL && p.y != indFinBC){
+		
+		return true; 
+    }
+	else{
+		return false;
+    }
+}
+
 function verifBulles(matBulles, lance){
 /*Fonction qui verifie le nombre de voisins de meme couleur que la Bulle lancee
 Entrees : matrice de Bulles sur laquelle on joue et la Bulle lancee par le canon
@@ -7,8 +27,8 @@ Sortie : nbSame l'entier du nbr de voisins identiques*/
     let voisin = new Bulle; //voisin qu'on va mettre dans le tableau final
     voisin.color = lance.color; // puisque le voisin va etre identique on l'initialise avec la couleur de la Bulle lancee
 
-    indMaxL = longueur(0, matBulles)-1;
-    indMaxC = longueur(1, matBulles)-1;
+    let indMaxL = longueur(0, matBulles)-1;
+    let indMaxC = longueur(1, matBulles)-1;
     
     /*Si la Bulle lancee n'est pas sur un bord*/
     if (!bord(matBulles, lance.p)){
