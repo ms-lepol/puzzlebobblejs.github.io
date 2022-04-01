@@ -5,8 +5,8 @@ Sorties : renvoie Vrai si la Boule de position p est sur un des bords de la matr
 function bord(matBulles, Position p){
 
 	let indDebB = 0;
-	let indFinBL = matBulles.length(0) - 1;
-	let indFinBC = matBulles.length(1) - 1;
+	let indFinBL = matBulles[0].length - 1;
+	let indFinBC = matBulles[1].length - 1;
 	
 	if (p.x != indDebB && p.y != indDebB && 
 	    p.x != indFinBL && p.y != indFinBC){
@@ -27,8 +27,8 @@ Sortie : nbSame l'entier du nbr de voisins identiques*/
     let voisin = new Bulle; //voisin qu'on va mettre dans le tableau final
     voisin.color = lance.color; // puisque le voisin va etre identique on l'initialise avec la couleur de la Bulle lancee
 
-    let indMaxL = longueur(0, matBulles)-1;
-    let indMaxC = longueur(1, matBulles)-1;
+    let indMaxL = matBulles[0].length - 1;
+    let indMaxC = matBulles[1].length - 1;
     
     /*Si la Bulle lancee n'est pas sur un bord*/
     if (!bord(matBulles, lance.p)){
@@ -192,7 +192,7 @@ Sortie : nbSame l'entier du nbr de voisins identiques*/
             }	
         }
         //Si la Bulle est sur le mur droit (sur une ligne impaire car plus de voisins)
-        else if (lancee.pos.y == indMaxC	&& lancee.pos.x % 2 == 1){
+        else if (lancee.pos.y == indMaxC && lancee.pos.x % 2 == 1){
         
             if(matBulles[lance.pos.x][lance.pos.y].color == matBulles[lance.pos.x][lance.pos.y-1].color){ //Gauche
                 
