@@ -99,25 +99,13 @@
     function captureRelacheToucheClavier(event) {
   
     }
-    
-    /**
-     *  Fonction appelée lorsqu'une touche du clavier est relâchée
-     *  Associée à l'événement "click"
-     */
-    function captureClicSouris(event) {
-        // calcul des coordonnées de la souris dans le canvas
-        if (event.target.id == "cvs") {
-            clic.x = event.pageX - event.target.offsetLeft;
-            clic.y = event.pageY - event.target.offsetTop;
-        }
-    }
         
     </script>
 </head>
 
 <body onload="init()">
 
-    <canvas id="cvs" width="1280" height="800" style="margin: 10px auto; border: solid 1px #000;"></canvas>
+    <canvas id="cvs" width="1280" height="960" style="margin: 10px auto; border: solid 1px #000;"></canvas>
 
 </body>
 
