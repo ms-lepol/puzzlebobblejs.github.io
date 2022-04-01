@@ -9,7 +9,7 @@ function bord(matBulles, Position p){
 	let indFinBC = matBulles.length(1) - 1;
 	
 	if (p.x != indDebB && p.y != indDebB && 
-		p.x != indFinBL && p.y != indFinBC){
+	    p.x != indFinBL && p.y != indFinBC){
 		
 		return true; 
     }
