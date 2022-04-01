@@ -2,7 +2,7 @@
 Entrees : la matrice de Boules et laz position p de la Boule testee
 Sorties : renvoie Vrai si la Boule de position p est sur un des bords de la matrice de Boules
 				  Faux sinon.*/
-fonction bord(matBulles, Position p){
+function bord(matBulles, Position p){
 
 	let indDebB = 0;
 	let indFinBL = matBulles.length(0) - 1;
