@@ -35,8 +35,8 @@ Sortie : nbSame l'entier du nbr de voisins identiques*/
 
 function voisins(matBulles, bulle){
 
-    let tabVoisins = [];
-    let voisin;
+    let tabVoisins = []; // Tableau de voisins retourné a la fin
+    let voisin; // voisin de Type Bulle
     let tab = [
         {
             x : -1,
@@ -58,11 +58,11 @@ function voisins(matBulles, bulle){
             x : 1,
             y : 1
         }
-        ];
+        ]; // Tableau permettant de regarder chaques voisins d'une bulle
 
-    if (matBulles[l][c] == true){
+     for (i = 0; i<tab.length; i++){
 
-        for (i = 0; i<tab.length; i++){
+        if (matBulles[lance.pos.x + tab[i].x][lance.pos.y + tab[i].y] == true){
 
             voisin.pos.x = lance.pos.x + tab[i].x; // x+1 : y et y-1 ; x-1 : y et y+1 ; x : y-1
             voisin.pos.y = lance.pos.y + tab[i].y; // y : x-1 et x+1; y+1 : x-1 et x ; y-1 : x 
