@@ -3,61 +3,23 @@ function verifBulles(matBulles, lance){
 Entrees : matrice de Bulles sur laquelle on joue et la Bulle lancee par le canon
 Sortie : nbSame l'entier du nbr de voisins identiques*/
 
-    let tabVoisins = []; // le tableau des Bulles voisines qu'on va retourner
+    let tabSameVoisins = []; // le tableau des Bulles voisines qu'on va retourner
     let voisin; //voisin qu'on va mettre dans le tableau final
     voisin.color = lance.color; // puisque le voisin va etre identique on l'initialise avec la couleur de la Bulle lancee
 
-    indMaxL = longueur(0, matBulles)-1;
-    indMaxC = longueur(1, matBulles)-1;
-        
-    if (matBulles[l][c]){
-        /*On regarde si la Bulle est identique à son voisin (spécifié par le commentaire a droite)
-        Pour tous les voisins autour de la Bulle.
-        
-        *faire avec deux boucles**/
-        if(matBulles[lance.pos.x][lance.pos.y] == matBulles[lance.pos.x-1][lance.pos.y]){ //Haut Gauche
+    tabVoisins = voisins(matBulles, lance);
 
-            voisin.pos.x = lance.pos.x-1; // On donne les coordonnes du voisin identique a voisin
-            voisin.pos.y = lance.pos.y;
-            tabVoisins.push(voisin); //On met voisin seul a la place nbSame-1 car else on commence a la position 1 
+    for (i = 0; i<tabVoisins.length; i++){
+        if (lance.color = matBulles[tabVoisins.pos.x][tabVoisins.pos.y]){
+            tabSameVoisins.push(matBulles[tabVoisins.pos.x][tabVoisins.pos.y]);
         }
-        if(matBulles[lance.pos.x][lance.pos.y].color == matBulles[lance.pos.x-1][lance.pos.y+1].color){ //Haut Droite
-            
-            voisin.pos.x = lance.pos.x-1;
-            voisin.pos.y = lance.pos.y+1;
-            tabVoisins.push(voisin);
-        }
-        if(matBulles[lance.pos.x][lance.pos.y].color == matBulles[lance.pos.x][lance.pos.y-1].color){ //Gauche
-            
-            voisin.pos.x = lance.pos.x;
-            voisin.pos.y = lance.pos.y-1;
-            tabVoisins.push(voisin);
-        }
-        if(matBulles[lance.pos.x][lance.pos.y].color == matBulles[lance.pos.x][lance.pos.y+1].color){ //Droite
-            
-            voisin.pos.x = lance.pos.x;
-            voisin.pos.y = lance.pos.y+1;
-            tabVoisins.push(voisin);
-        }
-        if(matBulles[lance.pos.x][lance.pos.y].color == matBulles[lance.pos.x+1][lance.pos.y].color){ //Bas Gauche
-            
-            voisin.pos.x = lance.pos.x+1;
-            voisin.pos.y = lance.pos.y;
-            tabVoisins.push(voisin);
-        }
-        if(matBulles[indLB][indCB].color == matBulles[lance.pos.x+1][lance.pos.y+1].color){ //Bas Droite
-            
-            voisin.pos.x = lance.pos.x+1;
-            voisin.pos.y = lance.pos.y+1;
-            tabVoisins.push(voisin);
-        }
-    }
+    } 
 
     /*On retourne maintenant le tableau de voisin identiques si sa longueur est differente de 1
     car il n'y a pas d'indetermination puisque a 0 il ne se passe rien alors qu'au
     dessus de 2 on fait forcement tomber.*/
-    if (tabVoisins.length != 1 ){
-        return tabVoisins;
+    if (tabSameVoisins.length != 1 ){
+        return tabSameVoisins;
     }
     /*Dans le cas ou la longueur de tabVoisins = 1, cela signifie que la Bulle lancee a autour 
     d'elle un seul voisin de meme couleur. Or ce voisin peut avoir lui un 
@@ -65,8 +27,48 @@ Sortie : nbSame l'entier du nbr de voisins identiques*/
     Donc on ajoute au nbSame le nbSame du voisin moins 1 car on ne 
     compte pas la Bulle deja lancee.*/
     else {
-        tabVoisins.push(verifBulles(matBulles, voisin));
-        tabVoisins.splice(tabVoisins.indexOff(lance),1);
+        tabSameVoisins.push(verifBulles(matBulles, tabSameVoisins[0]));
+        tabSameVoisins.splice(tabVoisins.indexOff(lance),1);
         return tabVoisins;
     }
+}
+
+function voisins(matBulles, bulle){
+
+    let tabVoisins = [];
+    let voisin;
+    let tab = [
+        {
+            x : -1,
+            y : 0
+        },
+        {
+            x :-1,
+            y : 1
+        },
+        {
+            x : 0,
+            y : -1
+        },
+        {  
+            x : 1,
+            y : 0
+        },
+        {
+            x : 1,
+            y : 1
+        }
+        ];
+
+    if (matBulles[l][c] == true){
+
+        for (i = 0; i<tab.length; i++){
+
+            voisin.pos.x = lance.pos.x + tab[i].x; // x+1 : y et y-1 ; x-1 : y et y+1 ; x : y-1
+            voisin.pos.y = lance.pos.y + tab[i].y; // y : x-1 et x+1; y+1 : x-1 et x ; y-1 : x 
+            tabVoisins.push(voisin);
+        }
+    }
+
+    return tabVoisins;
 }
