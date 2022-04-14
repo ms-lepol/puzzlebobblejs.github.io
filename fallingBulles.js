@@ -3,12 +3,10 @@ Entrés : matBoule la matrice de boules sur laquelle on joue
 		 tabVoisins le tableau des voisins identiques de la boule lancee
 Sortie : la matrice de boules avec les voisins tombés*/
 function breakBulles(matBulles, lance){
-    tabVoisins = voisins(matBulles, lance)
+    tabSameVoisins = verifBulle(matBulles, lance)
 	
-	for (i = 0; i < tabVoisins.length; i++) {
-		if (matBulles[tabVoisins[i].p.x][tabVoisins[i].p.y] == lance){
-            matBulles[tabVoisins[i].p.x][tabVoisins[i].p.y] = 0
-        }
+	for (i = 0; i < tabSameVoisins.length; i++) {
+		matBulles[tabSameVoisins.pos.x][tabSameVoisins.pos.y] = '0';
 		//Ici on parcourt la table des voisins identiques et on les fait tomber
     }
     matBulles[lance.x][lance.y] = 0;
