@@ -29,13 +29,15 @@ function verifBulles(matBulles, lance){
 
 function breakV(matBulles, bulle){
     tabV = sameVoisins(matBulles, bulle);
+    matBulles[bulle.y][bulle.x] = '0';
+
     if (tabV.length == 0){
         return 0;
     }
     else {
         for (i = 0; i < tabV.length; i++ ){
+            
             return breakV(matBulles, tabV[i]);
-            matBulles[tabV[i].y][tabV[i].x] = '0';
         }
     }
 }
