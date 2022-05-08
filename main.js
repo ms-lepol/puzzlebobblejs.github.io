@@ -61,7 +61,6 @@ function createMatLvl(matBulle, tabChar){
 
     return matBulle;
 }
-
 //Definition des niveaux
 
 /* [['0','0','0','0','0','0','0','0'],
@@ -77,116 +76,119 @@ function createMatLvl(matBulle, tabChar){
     ['0','0','0','0','0','0','0','0'],
     ['0','0','0','0','0','0','0','P']];*/
 
-let tab4Char = ['b','v','j','r'];
-let tab6Char = ['b','v','j','r','o','p'];
-let tab8Char = ['b','v','j','r','g','o','p','w'];
-
-let matBulle1 = 
+    let tab4Char = ['b','v','j','r'];
+    let tab6Char = ['b','v','j','r','o','p'];
+    let tab8Char = ['b','v','j','r','g','o','p','w'];
     
-   [[1,1,2,2,3,3,4,4],
-    [1,1,2,2,3,3,4,'P'],
-    [5,5,6,6,7,7,8,8],
-    [5,6,6,7,7,8,8,'P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P']];
-
-let lvl1 = {
-    matBulle : createMatLvl(matBulle1, tab4Char),
-    round : 1,
-    numEtape : 1
-};
-
-let matBulle2 = 
-
-   [['0','0','0','g','g','0','0','0'],
-    ['0','0','0',1,'0','0','0','P'],
-    ['0','0','0',2,'0','0','0','0'],
-    ['0','0','0',3,'0','0','0','P'],
-    ['0','0','0',4,'0','0','0','0'],
-    ['0','0','0',5,'0','0','0','P'],
-    ['0','0','0',6,'0','0','0','0'],
-    ['0','0','0',7,'0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P']];
+    let matBulle1 = 
+        
+       [[1,1,2,2,3,3,4,4],
+        [1,1,2,2,3,3,4,'P'],
+        [5,5,6,6,7,7,8,8],
+        [5,6,6,7,7,8,8,'P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P']];
     
-let lvl2 = {
-    matBulle : createMatLvl(matBulle2, tab8Char),
-    round : 1,
-    numEtape : 1
-};
-
-let matBulle3 = 
-
-   [[1,'0','0','0','0','0','0',1],
-    [2,3,4,5,6,7,8,'P'],
-    [9,'0','0','0','0','0','0',10],
-    [11,12,13,14,15,16,17,'P'],
-    ['0','0','0',18,'0','0','0','0'],
-    ['0','0','0',19,'0','0','0','P'],
-    ['0','0','0',20,'0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P']];
+    let lvl1 = {
+        matBulle : createMatLvl(matBulle1, tab4Char),
+        round : 1,
+        numEtape : 1
+    };
     
-let lvl3 = {
-    matBulle : createMatLvl(matBulle3, tab4Char),
-    round : 1,
-    numEtape : 1
-};
+    let matBulle2 = 
+    
+       [['0','0','0','g','g','0','0','0'],
+        ['0','0','0',1,'0','0','0','P'],
+        ['0','0','0',2,'0','0','0','0'],
+        ['0','0','0',3,'0','0','0','P'],
+        ['0','0','0',4,'0','0','0','0'],
+        ['0','0','0',5,'0','0','0','P'],
+        ['0','0','0',6,'0','0','0','0'],
+        ['0','0','0',7,'0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P']];
+        
+    let lvl2 = {
+        matBulle : createMatLvl(matBulle2, tab8Char),
+        round : 1,
+        numEtape : 1
+    };
+    
+    let matBulle3 = 
+    
+       [[1,'0','0','0','0','0','0',1],
+        [2,3,4,5,6,7,8,'P'],
+        [9,'0','0','0','0','0','0',10],
+        [11,12,13,14,15,16,17,'P'],
+        ['0','0','0',18,'0','0','0','0'],
+        ['0','0','0',19,'0','0','0','P'],
+        ['0','0','0',20,'0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P']];
+        
+    let lvl3 = {
+        matBulle : createMatLvl(matBulle3, tab4Char),
+        round : 1,
+        numEtape : 1
+    };
+    
+    let matBulle4 = 
+    
+       [['0',1,1,'0','0',2,2,'0'],
+        ['0',3,'0','0','0',4,'0','P'],
+        ['0',5,'0','0','0',9,'0','0'],
+        ['0',5,'0','0','0',9,'0','P'],
+        ['0',6,'0','0','0',10,'0','0'],
+        ['0',7,'0','0','0',11,'0','P'],
+        ['0',8,'0','0','0',12,'0','0'],
+        ['0',8,'0','0','0',12,'0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P']];
+    
+    let lvl4 = {
+        matBulle : createMatLvl(matBulle4, tab8Char),
+        round : 1,
+        numEtape : 1
+    };
+    
+    let matBulle5 = 
+    
+       [['0',1,'0',2,'0',3,'0',4],
+        [5,'0',7,'0',12,'0',16,'P'],
+        [6,'0',8,'0',13,'0',17,'0'],
+        ['0',9,'0',13,'0',17,'0','P'],
+        ['0',10,'0',14,'0',18,'0','0'],
+        [11,'0',14,'0',18,'0','0','P'],
+        ['0','0',15,'0',19,'0','0','0'],
+        ['0','0','0',20,'0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P'],
+        ['0','0','0','0','0','0','0','0'],
+        ['0','0','0','0','0','0','0','P']];
+    
+    let lvl5 = {
+        matBulle : createMatLvl(matBulle5, tab6Char),
+        round : 1,
+        numEtape : 1
+    };
+let tabLVL = [lvl1,lvl2,lvl3,lvl4,lvl5]
+let lvlIndex = 0;
+let nvActuel = tabLVL[lvlIndex];
+ 
 
-let matBulle4 = 
-
-   [['0',1,1,'0','0',2,2,'0'],
-    ['0',3,'0','0','0',4,'0','P'],
-    ['0',5,'0','0','0',9,'0','0'],
-    ['0',5,'0','0','0',9,'0','P'],
-    ['0',6,'0','0','0',10,'0','0'],
-    ['0',7,'0','0','0',11,'0','P'],
-    ['0',8,'0','0','0',12,'0','0'],
-    ['0',8,'0','0','0',12,'0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P']];
-
-let lvl4 = {
-    matBulle : createMatLvl(matBulle4, tab8Char),
-    round : 1,
-    numEtape : 1
-};
-
-let matBulle5 = 
-
-   [['0',1,'0',2,'0',3,'0',4],
-    [5,'0',7,'0',12,'0',16,'P'],
-    [6,'0',8,'0',13,'0',17,'0'],
-    ['0',9,'0',13,'0',17,'0','P'],
-    ['0',10,'0',14,'0',18,'0','0'],
-    [11,'0',14,'0',18,'0','0','P'],
-    ['0','0',15,'0',19,'0','0','0'],
-    ['0','0','0',20,'0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P'],
-    ['0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','P']];
-
-let lvl5 = {
-    matBulle : createMatLvl(matBulle5, tab6Char),
-    round : 1,
-    numEtape : 1
-};
-
-let nvActuel = lvl5;
 
 //VARIABLE DE LA MATRICE
 const WIDTHMAT = 8;
@@ -201,9 +203,9 @@ const WIDTH = WIDTHMAT*2*radius+centerXinit
 const HEIGHT = HEIGHTMAT*2*radius+centerYinit
 let srcY = 0;
 //VARIABLES POUR AFFICHAGE DU CANON
-let canonW = 60
-let canonH = 160
-var canonXinit = WIDTH/2;
+let canonW = 110
+let canonH = 275
+var canonXinit = WIDTH/2-canonW/4;
 var canonYinit = HEIGHT;
 
  //Variables générales de jeu
@@ -248,7 +250,7 @@ function init() {
 
     //Initialisation des sprites du jeu
     txtrBulle = document.createElement('img');
-    txtrBulle.src = "assets/bulles.png";
+    txtrBulle.src = "assets/bulles-export.png";
 
     txtrCanon = document.createElement('img');
     txtrCanon.src = "assets/canon.png";
@@ -304,6 +306,7 @@ function render() {
     affichageMatBulles(nvActuel.matBulle)
     affichageCanon(canon)
     afficherLaunchedBulle(canon)
+    afficherScore()
     
 }
     
@@ -328,11 +331,11 @@ function captureAppuiToucheClavier(event) {
     if (event.code == 'ArrowRight' && canon.angle > 10 ){
         canon.angle-=1;
     }
-    if (event.code == 'PageUp' && srcY < 640){
-        srcY += 40;
+    if (event.code == 'PageUp' && srcY < 2560){
+        srcY += 160;
     }
     if (event.code == 'PageDown' && srcY > 0){
-        srcY -= 40;
+        srcY -= 160;
     }
 
 }
@@ -370,13 +373,13 @@ function affichageMatBulles(matBulle){
                 if (matBulle[l][WIDTHMAT-1] !='P'){
                     context.drawImage(txtrBulle, // img src
                                     getBulleImg(matBulle[l][c]), //x pour récupérer la txt dans la source
-                                    srcY,16,16, //Zone de "crop" de l'image de la source
-                                    0.5*radius+centerXinit+2*radius*c,centerYinit+2*radius*l, //position d'affichage sur le canvas
+                                    srcY,64,64, //Zone de "crop" de l'image de la source
+                                    centerXinit+radius*0.5+2*radius*c,centerYinit+2*radius*l, //position d'affichage sur le canvas
                                     radius*2,radius*2) //width et height sur le canvas
                 } else {
                     context.drawImage(txtrBulle, // img src
                                     getBulleImg(matBulle[l][c]), //x pour récupérer la txt dans la source
-                                    srcY,16,16, //Zone de "crop" de l'image de la source
+                                    srcY,64,64, //Zone de "crop" de l'image de la source
                                     radius*1.5+centerXinit+2*radius*c,centerYinit+2*radius*l, //position d'affichage sur le canvas
                                     radius*2,radius*2) //width et height sur le canvas
                     }
@@ -397,17 +400,10 @@ function affichageCanon(canon){
     context.drawImage(txtrCanon, -canonW/2,-canonH/2,canonW,canonH);
     
     context.restore();
-    /*context.beginPath();
-    let dir = convertToRadians(canon.angle);
-    let vectdiraff = new Position(Math.cos(dir),Math.sin(dir))
-    context.moveTo(canonXinit, canonYinit);
-    context.lineTo(canonXinit + vectdiraff.x*100, canonYinit - vectdiraff.y*100);
-    context.stroke();
-*/
     //AFFICHAGE BOULES - COURANT
     context.drawImage(txtrBulle,
         getBulleImg(canon.courant.color),
-        srcY,16,16,
+        srcY,64,64,
         canonXinit,canonYinit+2*radius,
         radius*2,radius*2)
 
@@ -416,7 +412,7 @@ function affichageCanon(canon){
     
     context.drawImage(txtrBulle, // img src
         getBulleImg(canon.suivant.color), //x pour récupérer la txt dans la source
-        srcY,16,16, //Zone de "crop" de l'image de la source
+        srcY,64,64, //Zone de "crop" de l'image de la source
         canonXinit-2*radius,canonYinit+2*radius, //position d'affichage sur le canvas
         radius*2,radius*2) //width et height sur le canvas
 
@@ -503,6 +499,7 @@ function launchBulle(matBulle, canon){
             
             if (cluster.length>=3){
                 //breakingBulle = true;
+                score+= cluster.length*10
                 breakBulle(matBulle,cluster);
                 
             }
@@ -511,13 +508,22 @@ function launchBulle(matBulle, canon){
             console.log("nombre de bulles volantes : ", clusterFlottant.length)
             console.log(clusterFlottant)
            if (clusterFlottant != -1){ 
-                
+                score+= clusterFlottant.length*20
                 breakBulle(matBulle,clusterFlottant);
             }
-            console.log(checkVictory(matBulle))
-            //Chargement du canon
-            canon.courant = canon.suivant;
-            canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
+            if(checkVictory(matBulle)){
+                if (lvlIndex != tabLVL.length-1){
+                    lvlIndex += 1;
+                    nvActuel = tabLVL[lvlIndex];
+                    canon.courant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
+                    canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
+                }    
+            }
+            else{
+                //Chargement du canon
+                canon.courant = canon.suivant;
+                canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
+            }
         }
         
     }
@@ -534,7 +540,7 @@ function afficherLaunchedBulle(canon){
         if (bubbleLaunched){
             context.drawImage(txtrBulle,
                               getBulleImg(canon.courant.color),
-                              srcY,16,16,
+                              srcY,64,64,
                               centerXinit+2*radius*canon.courant.x,
                               centerYinit+2*radius*canon.courant.y,
                               radius*2,radius*2)
@@ -724,14 +730,14 @@ function isIn(element, tab){
 function getBulleImg(char){
     let sxBulle;
     switch(char){
-        case 'b': sxBulle = 272; break;
-        case 'v': sxBulle = 204; break;
-        case 'j': sxBulle = 136; break;
+        case 'b': sxBulle = 272*4; break;
+        case 'v': sxBulle = 204*4; break;
+        case 'j': sxBulle = 136*4; break;
         case 'r': sxBulle = 0; break;
-        case 'g': sxBulle = 408; break;
-        case 'o': sxBulle = 68; break;
-        case 'w': sxBulle = 476; break;
-        case 'p': sxBulle = 340; break;
+        case 'g': sxBulle = 408*4; break;
+        case 'o': sxBulle = 68*4; break;
+        case 'w': sxBulle = 476*4; break;
+        case 'p': sxBulle = 340*4; break;
     }
     return sxBulle
 }
@@ -752,4 +758,10 @@ function checkVictory(matBulle){
         }
     return true;
     } 
+}
+function afficherScore(){
+    context.fillStyle = 'white'
+    context.font = '30px Helvetica';
+    context.textAlign = "center";
+    context.fillText('SCORE : ' + score,centerXinit+WIDTH+radius*4,centerYinit)
 }
