@@ -763,5 +763,9 @@ function afficherScore(){
     context.fillStyle = 'white'
     context.font = '30px Helvetica';
     context.textAlign = "center";
-    context.fillText('SCORE : ' + score,centerXinit+WIDTH+radius*4,centerYinit)
+    context.fillText('SCORE : ' + score,centerXinit,centerYinit)
+    context.fillStyle = 'black';
+    context.lineWidth = 5;
+    context.strokeStyle = '#003300';
+    context.stroke()
 }
