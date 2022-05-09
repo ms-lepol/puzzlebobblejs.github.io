@@ -19,6 +19,7 @@ let context = null;
 //Variable de la différence de temps entre deux frames
 let dT;
 let lastD = 0;
+let timeOut = Date.now();
 //Fonctions servant a creer les niveaux
 
 function charRdm(tabChar){
@@ -195,7 +196,7 @@ const WIDTHMAT = 8;
 const HEIGHTMAT = 12; 
 
 //VARIABLES POUR AFFICHAGE DE LA MATRICE
-
+let AnimationBulleFrame = 0
 var centerXinit = 60;
 var centerYinit = 60;
 var radius = 32
@@ -209,14 +210,15 @@ var canonXinit = WIDTH/2-canonW/4;
 var canonYinit = HEIGHT;
 
  //Variables générales de jeu
-let round = 0;
+let round = 1;
 let score = 0;
-let timerLaunchB = 0;
+let timerLaunchB = Date.now();
+const cdLaunchBulle = 12000
 let timerRound = 0;
-let countFallWall = 0;
+let countFallWall = 8;
 let direction = 90;
 var bubbleLaunched;
-
+let ceilingIndex = 0
 
 var tabchar = ['b','v','j','r','g','o','p','w'];
 var cluster = []
@@ -276,7 +278,7 @@ function boucleDeJeu() {
         // mise à jour de l'état du jeu
     update(Date.now());    
         // affichage de l'état du jeu
-    render();
+    render(Date.now());
         // rappel de la boucle de jeu 
         // requestAnimationFrame est une fonction JS servant à pré-calculer le prochain affichage
         //  http://www.html5canvastutorials.com/advanced/html5-canvas-animation-stage/
@@ -291,15 +293,23 @@ function boucleDeJeu() {
 function update(d) {
     let dT = d-lastD;
     lastD=d;
-    launchBulle(nvActuel.matBulle, canon);
     
+    launchBulle(nvActuel.matBulle, canon);
+    if (d - timerLaunchB >=cdLaunchBulle){
+        timerLaunchB=d
+        speed = 0.3
+        round += 1
+        dir = convertToRadians(canon.angle);
+        vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
+        bubbleLaunched = true;
+    }
 }
     
     
 /**
  *  Fonction réalisant le rendu de l'état du jeu
  */
-function render() {
+function render(d) {
    // effacement de l'écran
     context.clearRect(0, 0, context.width, context.height);
     drawBackground();
@@ -307,7 +317,11 @@ function render() {
     affichageCanon(canon)
     afficherLaunchedBulle(canon)
     afficherScore()
-    
+    checkCeiling()
+    if (d - timeOut>=30000){
+        timeOut=d;
+        LaunchAnimationBulleFrame()
+    }
 }
     
 /**
@@ -319,6 +333,7 @@ function captureAppuiToucheClavier(event) {
     //  --> http://www.cambiaresearch.com/articles/15/javascript-key-codes
     if (event.code == 'Space' && !bubbleLaunched){
         speed = 0.3
+        round += 1
         dir = convertToRadians(canon.angle);
         vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
         bubbleLaunched = true;
@@ -374,13 +389,13 @@ function affichageMatBulles(matBulle){
                     context.drawImage(txtrBulle, // img src
                                     getBulleImg(matBulle[l][c]), //x pour récupérer la txt dans la source
                                     srcY,64,64, //Zone de "crop" de l'image de la source
-                                    centerXinit+radius*0.5+2*radius*c,centerYinit+2*radius*l, //position d'affichage sur le canvas
+                                    centerXinit+radius*0.5+2*radius*c,radius*1.2+2*radius*l+ceilingIndex*2*radius, //position d'affichage sur le canvas
                                     radius*2,radius*2) //width et height sur le canvas
                 } else {
                     context.drawImage(txtrBulle, // img src
                                     getBulleImg(matBulle[l][c]), //x pour récupérer la txt dans la source
                                     srcY,64,64, //Zone de "crop" de l'image de la source
-                                    radius*1.5+centerXinit+2*radius*c,centerYinit+2*radius*l, //position d'affichage sur le canvas
+                                    radius*1.5+centerXinit+2*radius*c,radius*1.2+2*radius*l+ceilingIndex*2*radius, //position d'affichage sur le canvas
                                     radius*2,radius*2) //width et height sur le canvas
                     }
            }
@@ -421,7 +436,12 @@ function affichageCanon(canon){
 function convertToRadians(degree) {
     return degree*(Math.PI/180);
 }
-
+function checkCeiling(){
+    if (round % countFallWall == 0){
+        ceilingIndex +=1;
+        round = 1;
+    }
+}
 function launchBulle(matBulle, canon){
     var newbubble = new Position()
     let matPos = new Position()
@@ -432,6 +452,7 @@ function launchBulle(matBulle, canon){
     
     if(bubbleLaunched){
         console.log("launched")
+        
         speed = speed*speed;
         //Déplacement en X : vérification du mur - pas de rebond
         if (0 < canon.courant.x + vectdir.x && canon.courant.x + vectdir.x < xmax){
@@ -496,17 +517,18 @@ function launchBulle(matBulle, canon){
             gameOver(matBulle)
             
             cluster = trouveCluster(matBulle,canon.courant,true)
-            
+            ;
             if (cluster.length>=3){
                 //breakingBulle = true;
+                
                 score+= cluster.length*10
+             
                 breakBulle(matBulle,cluster);
+                  
                 
             }
             //sameVoisins(matBulle,canon.courant)
             var clusterFlottant = findBullesFlottante(matBulle);
-            console.log("nombre de bulles volantes : ", clusterFlottant.length)
-            console.log(clusterFlottant)
            if (clusterFlottant != -1){ 
                 score+= clusterFlottant.length*20
                 breakBulle(matBulle,clusterFlottant);
@@ -515,8 +537,9 @@ function launchBulle(matBulle, canon){
                 if (lvlIndex != tabLVL.length-1){
                     lvlIndex += 1;
                     nvActuel = tabLVL[lvlIndex];
-                    canon.courant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
-                    canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
+                    ceilingIndex = 0
+                    canon.courant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
+                    canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
                 }    
             }
             else{
@@ -686,7 +709,8 @@ function voisins(matBulle, bulle) {
     return tabVoisins;
 }
 function drawBackground(){
-    context.drawImage(bgimg,0,0,context.width,context.height)
+    context.drawImage(bgimg,0,0)
+    context.drawImage(ceiling,0,800-radius-radius*2*ceilingIndex,WIDTH+radius,radius+radius*2*ceilingIndex,centerXinit-radius,0,WIDTH+2*radius,radius+radius*2*ceilingIndex,)
     context.drawImage(border,centerXinit-radius,0,WIDTH+radius,context.height)
 }
 function getRGBColor(char,alpha){
@@ -739,15 +763,22 @@ function getBulleImg(char){
         case 'w': sxBulle = 476*4; break;
         case 'p': sxBulle = 340*4; break;
     }
-    return sxBulle
+    return sxBulle+radius*2*AnimationBulleFrame;
 }
 
 function gameOver(matBulle){
     for (let i = 0;i<matBulle[0].length;i++){
-        if ((matBulle[HEIGHTMAT-1][i] != '0') && (matBulle[HEIGHTMAT-1][i] != 'P')){
+        if ((matBulle[HEIGHTMAT-1-ceilingIndex][i] != '0') && (matBulle[HEIGHTMAT-1-ceilingIndex][i] != 'P')){
             console.log("perdu!")
         }
     }
+}
+function LaunchAnimationBulleFrame(){
+    setTimeout(function () {AnimationBulleFrame=1},0)
+    setTimeout(function () {AnimationBulleFrame=2},50)
+    setTimeout(function () {AnimationBulleFrame=3},100)
+    setTimeout(function () {AnimationBulleFrame=0},150)
+    
 }
 function checkVictory(matBulle){
     for (let l = 0; l<matBulle.length; l++){
@@ -761,11 +792,12 @@ function checkVictory(matBulle){
 }
 function afficherScore(){
     context.fillStyle = 'white'
-    context.font = '30px Helvetica';
-    context.textAlign = "center";
-    context.fillText('SCORE : ' + score,centerXinit,centerYinit)
-    context.fillStyle = 'black';
-    context.lineWidth = 5;
+
     context.strokeStyle = '#003300';
-    context.stroke()
+    context.font = '30px Helvetica';
+    context.strokeText('SCORE : ' + score,centerXinit+radius,centerYinit-28)
+    
+    context.fillText('SCORE : ' + score,centerXinit+radius,centerYinit-28)
+    context.fillStyle = 'black';
+    context.lineWidth = 4;
 }
