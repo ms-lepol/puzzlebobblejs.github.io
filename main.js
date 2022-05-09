@@ -334,6 +334,7 @@ function captureAppuiToucheClavier(event) {
     if (event.code == 'Space' && !bubbleLaunched){
         speed = 0.3
         round += 1
+        timerLaunchB = Date.now()
         dir = convertToRadians(canon.angle);
         vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
         bubbleLaunched = true;
