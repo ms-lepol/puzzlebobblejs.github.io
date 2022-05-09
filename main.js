@@ -539,6 +539,8 @@ function launchBulle(matBulle, canon){
                     lvlIndex += 1;
                     nvActuel = tabLVL[lvlIndex];
                     ceilingIndex = 0
+                    round = 1;
+                    timerLaunchB = Date.now()
                     canon.courant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
                     canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
                 }    
