@@ -195,6 +195,23 @@ var readyGo = new Audio("SoundAndMusic/readyGo.mp3");
 var bubbleSticked = new Audio("SoundAndMusic/bubbleSticked.mp3");
 var gmOver = new Audio("SoundAndMusic/gameOver.mp3"); 
 var clearing = new Audio("SoundAndMusic/clearing.mp3"); 
+var thirdTrack = new Audio("3rdTrack.mp3");
+var ATO = new Audio("ATO.mp3");
+var agonie = new Audio("agonie.mp3");
+var canicheEgorge = new Audio("canicheEgorge.mp3");
+var clusterMade = new Audio("clusterMade.mp3");
+var continuing = new Audio("continuing.mp3");
+var ending = new Audio("ending.mp3");
+var idkSound1 = new Audio("idkSound1.mp3");
+var idkSound2 = new Audio("idkSound2.mp3");
+var idkSound3 = new Audio("idkSound3.mp3");
+var Win = new Audio("idkWin.mp3");
+var newLife = new Audio("newLife.mp3 ");
+var pieceMarioWish = new Audio("pieceMarioWish.mp3");
+var pufuiiiit = new Audio("pufuiiiit.mp3");
+var putuputuputu = new Audio("putuputuputu.mp3 ");
+var quMark = new Audio("quMark.mp3");
+var titleTheme = new Audio("title.mp3");
 
 //VARIABLE DE LA MATRICE
 const WIDTHMAT = 8;
@@ -309,9 +326,6 @@ function update(d) {
         vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
         bubbleLaunched = true;
     }
-    if (checkVictory(nvActuel.matBulle)){
-        clearing.play();
-    }
     if (gameOver(nvActuel.matBulle)){
         gmOver.play();
     }
@@ -344,6 +358,7 @@ function captureAppuiToucheClavier(event) {
     // pratique pour connaître les keyCode des touches du clavier :
     //  --> http://www.cambiaresearch.com/articles/15/javascript-key-codes
     if (event.code == 'Space' && !bubbleLaunched){
+        bubbleSticked.play();
         speed = 0.3
         round += 1
         timerLaunchB = Date.now()
@@ -464,7 +479,6 @@ function launchBulle(matBulle, canon){
     ymax = 0;
     
     if(bubbleLaunched){
-        bubbleSticked.play();
         
         speed = speed*speed;
         //Déplacement en X : vérification du mur - pas de rebond
@@ -550,6 +564,8 @@ function launchBulle(matBulle, canon){
                 if (lvlIndex != tabLVL.length-1){
                     lvlIndex += 1;
                     nvActuel = tabLVL[lvlIndex];
+                    mainTheme.play();
+                    clearing.play();
                     ceilingIndex = 0
                     round = 1;
                     timerLaunchB = Date.now()
