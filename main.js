@@ -1,4 +1,4 @@
-       
+          
 //TYPE AGREGEE POSITION
 class Position{
     constructor(x,y) {
@@ -205,7 +205,7 @@ var ending = new Audio("ending.mp3");
 var idkSound1 = new Audio("idkSound1.mp3");
 var idkSound2 = new Audio("idkSound2.mp3");
 var idkSound3 = new Audio("idkSound3.mp3");
-var Win = new Audio("idkWin.mp3");
+var winSound = new Audio("idkWin.mp3");
 var newLife = new Audio("newLife.mp3 ");
 var pieceMarioWish = new Audio("pieceMarioWish.mp3");
 var pufuiiiit = new Audio("pufuiiiit.mp3");
@@ -232,6 +232,7 @@ var canonXinit = WIDTH/2-canonW/4;
 var canonYinit = HEIGHT;
 
  //Variables générales de jeu
+let fallingBulle = false;
 let round = 1;
 let score = 0;
 let timerLaunchB = Date.now();
@@ -293,6 +294,7 @@ function init() {
                         
     // lancement de la boucle de jeu
     readyGo.play();
+    mainTheme.play();
     boucleDeJeu();
 }
     
@@ -330,7 +332,7 @@ function update(d) {
         gmOver.play();
     }
 }
-    
+let clusterFlottant;
     
 /**
  *  Fonction réalisant le rendu de l'état du jeu
@@ -339,14 +341,15 @@ function render(d) {
    // effacement de l'écran
     context.clearRect(0, 0, context.width, context.height);
     drawBackground();
-    affichageMatBulles(nvActuel.matBulle)
-    affichageCanon(canon)
-    afficherLaunchedBulle(canon)
-    afficherScore()
-    checkCeiling()
+    affichageMatBulles(nvActuel.matBulle);
+    affichageCanon(canon);
+    afficherLaunchedBulle(canon);
+    afficherScore();
+    checkCeiling();
+    fallingBulleAnimation(clusterFlottant);
     if (d - timeOut>=30000){
         timeOut=d;
-        LaunchAnimationBulleFrame()
+        LaunchAnimationBulleFrame();
     }
 }
     
@@ -466,6 +469,7 @@ function convertToRadians(degree) {
 }
 function checkCeiling(){
     if (round % countFallWall == 0){
+        canicheEgorge.play();
         ceilingIndex +=1;
         round = 1;
     }
@@ -555,17 +559,19 @@ function launchBulle(matBulle, canon){
                 
             }
             //sameVoisins(matBulle,canon.courant)
-            var clusterFlottant = findBullesFlottante(matBulle);
-           if (clusterFlottant != -1){ 
+            clusterFlottant = findBullesFlottante(matBulle);
+            if (clusterFlottant != -1){ 
                 score+= clusterFlottant.length*20
                 breakBulle(matBulle,clusterFlottant);
+                
             }
             if(checkVictory(matBulle)){
                 if (lvlIndex != tabLVL.length-1){
                     lvlIndex += 1;
                     nvActuel = tabLVL[lvlIndex];
-                    mainTheme.play();
+                    mainTheme.load();
                     clearing.play();
+                    mainTheme.play();
                     ceilingIndex = 0
                     round = 1;
                     timerLaunchB = Date.now()
@@ -597,7 +603,7 @@ function afficherLaunchedBulle(canon){
                               srcY,64,64,
                               centerXinit+2*radius*canon.courant.x,
                               centerYinit+2*radius*canon.courant.y,
-                              radius*2,radius*2)
+                              radius*2,radius*2);
             /*
             context.fillStyle = getBulleImg(canon.courant.color);
             context.beginPath()
@@ -608,6 +614,25 @@ function afficherLaunchedBulle(canon){
             context.stroke();
             */
         }
+}
+
+function fallingBulleAnimation(cluster){
+
+    if (fallingBulle){
+        let pos = new Position(0,-1);
+        for (let i = 0; i<cluster.length; i++){
+            context.drawImage(
+                txtrBulle,
+                getBulleImg(cluster[i].color),
+                srcY,64,64,
+                centerXinit+2*radius*cluster[i].x,
+                centerYinit+2*radius*cluster[i].y,
+                radius*2,radius*2,
+            );
+            cluster[i].y -=pos.y;
+            cluster[i].x = pos.x;
+        }
+    }
 }
 
 // Find floating clusters
@@ -641,6 +666,7 @@ function findBullesFlottante(matBulles) {
                 
                 if (floating) {
                     // Found a floating cluster
+                    fallingBulle = true;
                     for (let f = 0; f < currentCluster.length;f++){
                         clusterTrouves.push(currentCluster[f]);
                     }
