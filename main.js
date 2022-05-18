@@ -650,7 +650,6 @@ function fallingBulleAnimation(cluster){
                 radius*2,radius*2,
             );
             cluster[i].y -=pos.y;
-            cluster[i].x = pos.x;
         }
     }
 }
@@ -721,6 +720,7 @@ function trouveCluster(matBulles, lance, sameColor){
         // Check if current tile has the right type, if matchtype is true
         if (!sameColor || (currentBulle.color == lance.color)) {
             // Add current tile to the cluster
+            
             clusterTrouve.push(currentBulle);
  
             tabVoisins = voisins(matBulles,currentBulle);
