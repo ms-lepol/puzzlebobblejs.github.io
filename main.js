@@ -1,4 +1,4 @@
-          
+       
 //TYPE AGREGEE POSITION
 class Position{
     constructor(x,y) {
@@ -205,13 +205,11 @@ var ending = new Audio("ending.mp3");
 var idkSound1 = new Audio("idkSound1.mp3");
 var idkSound2 = new Audio("idkSound2.mp3");
 var idkSound3 = new Audio("idkSound3.mp3");
+var Win = new Audio("idkWin.mp3");
 var winSound = new Audio("idkWin.mp3");
 var newLife = new Audio("newLife.mp3 ");
 var pieceMarioWish = new Audio("pieceMarioWish.mp3");
 var pufuiiiit = new Audio("pufuiiiit.mp3");
-var putuputuputu = new Audio("putuputuputu.mp3 ");
-var quMark = new Audio("quMark.mp3");
-var titleTheme = new Audio("title.mp3");
 
 //VARIABLE DE LA MATRICE
 const WIDTHMAT = 8;
@@ -225,13 +223,8 @@ var radius = 32
 const WIDTH = WIDTHMAT*2*radius+centerXinit
 const HEIGHT = HEIGHTMAT*2*radius+centerYinit
 let srcY = 0;
-//VARIABLES POUR AFFICHAGE DU CANON
-let canonW = 110
-let canonH = 275
-var canonXinit = WIDTH/2-canonW/4;
-var canonYinit = HEIGHT;
 
- //Variables générales de jeu
+//Variables générales de jeu
 let fallingBulle = false;
 let round = 1;
 let score = 0;
@@ -241,19 +234,30 @@ let timerRound = 0;
 let countFallWall = 8;
 let direction = 90;
 var bubbleLaunched;
-let ceilingIndex = 0
+let ceilingIndex = 0;
+let etatDuJeu = "menu";
+let clusterFlottant;
+
+/* Définition d'un canon  */
+var canon  = {
+    suivant : new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle))),
+    courant : new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle))),
+    angle : 90
+};
+
+ 
 
 var tabchar = ['b','v','j','r','g','o','p','w'];
 var cluster = []
 // clic sur la zone de jeu (coordonnées relatives au canvas)
 let clic = { x: 0, y: 0 };
     
-/* Définition d'un canon  */
-var canon  = {
-    suivant : new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle))),
-    courant : new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle))),
-    angle : 90
-};
+//VARIABLES POUR AFFICHAGE DU CANON
+let canonW = 110
+let canonH = 275
+var canonXinit = WIDTH/2-canonW/4;
+var canonYinit =  centerYinit+2*radius*(canon.courant.y-2);
+
 
 //VARIABLES DE DEPLACEMENT
 let speed = 0.5;
@@ -285,6 +289,9 @@ function init() {
     
     ceiling = document.createElement('img');
     ceiling.src = "assets/ceiling.png";
+
+    logo = document.createElement('img');
+    logo.src = "assets/pzlogo.png";
     // 2 écouteurs pour le clavier (appui/relâchement d'une touche)
     document.addEventListener("keydown", captureAppuiToucheClavier)
     document.addEventListener("keyup", captureRelacheToucheClavier)
@@ -318,21 +325,26 @@ function boucleDeJeu() {
 function update(d) {
     let dT = d-lastD;
     lastD=d;
+
+    if (etatDuJeu=='jeu'){
+        checkCeiling()
+        launchBulle(nvActuel.matBulle, canon);
+        if (d - timerLaunchB >=cdLaunchBulle){
+            timerLaunchB=d
+            speed = 0.3
+            round += 1
+            dir = convertToRadians(canon.angle);
+            vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
+            bubbleLaunched = true;
+        }
+        if (checkVictory(nvActuel.matBulle)){
+            clearing.play();
+        }
+        gameOver(nvActuel.matBulle);
+    }
     
-    launchBulle(nvActuel.matBulle, canon);
-    if (d - timerLaunchB >=cdLaunchBulle){
-        timerLaunchB=d
-        speed = 0.3
-        round += 1
-        dir = convertToRadians(canon.angle);
-        vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
-        bubbleLaunched = true;
-    }
-    if (gameOver(nvActuel.matBulle)){
-        gmOver.play();
-    }
 }
-let clusterFlottant;
+    
     
 /**
  *  Fonction réalisant le rendu de l'état du jeu
@@ -341,47 +353,62 @@ function render(d) {
    // effacement de l'écran
     context.clearRect(0, 0, context.width, context.height);
     drawBackground();
-    affichageMatBulles(nvActuel.matBulle);
-    affichageCanon(canon);
-    afficherLaunchedBulle(canon);
-    afficherScore();
-    checkCeiling();
-    fallingBulleAnimation(clusterFlottant);
-    if (d - timeOut>=30000){
-        timeOut=d;
-        LaunchAnimationBulleFrame();
+    if (etatDuJeu == 'menu'){
+        afficherMenu();
     }
-}
+    if(etatDuJeu != 'menu'){
+        drawBorder();
+        affichageMatBulles(nvActuel.matBulle);
+        affichageCanon(canon);
+        afficherLaunchedBulle(canon);
+        afficherScore();
+        fallingBulleAnimation(clusterFlottant);
+        if (d - timeOut>=30000){
+            timeOut=d;
+            LaunchAnimationBulleFrame()
+        }
+    }
+    if (etatDuJeu=='gameOver'){
+        drawGameOver()
+    }
+} 
     
 /**
  *  Fonction appelée lorsqu'une touche du clavier est appuyée
  *  Associée à l'événement "keyDown"
  */
 function captureAppuiToucheClavier(event) {
+    
     // pratique pour connaître les keyCode des touches du clavier :
     //  --> http://www.cambiaresearch.com/articles/15/javascript-key-codes
-    if (event.code == 'Space' && !bubbleLaunched){
-        bubbleSticked.play();
-        speed = 0.3
-        round += 1
-        timerLaunchB = Date.now()
-        dir = convertToRadians(canon.angle);
-        vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
-        bubbleLaunched = true;
-        
+    if (etatDuJeu=='menu'&& event.code =='Enter'){
+        etatDuJeu = 'jeu'
+        mainTheme.play();
     }
-    if (event.code == 'ArrowLeft' && canon.angle <170){
-        canon.angle+=1;
-    }
+    
+    if (etatDuJeu=='jeu'){
+        if (event.code == 'Space' && !bubbleLaunched){
+            speed = 0.3
+            round += 1
+            timerLaunchB = Date.now()
+            dir = convertToRadians(canon.angle);
+            vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
+            bubbleLaunched = true;
+            
+        }
+        if (event.code == 'ArrowLeft' && canon.angle <170){
+            canon.angle+=2;
+        }
 
-    if (event.code == 'ArrowRight' && canon.angle > 10 ){
-        canon.angle-=1;
-    }
-    if (event.code == 'PageUp' && srcY < 2560){
-        srcY += 160;
-    }
-    if (event.code == 'PageDown' && srcY > 0){
-        srcY -= 160;
+        if (event.code == 'ArrowRight' && canon.angle > 10 ){
+            canon.angle-=2;
+        }
+        if (event.code == 'PageUp' && srcY < 2560){
+            srcY += 160;
+        }
+        if (event.code == 'PageDown' && srcY > 0){
+            srcY -= 160;
+        }
     }
 
 }
@@ -420,13 +447,15 @@ function affichageMatBulles(matBulle){
                     context.drawImage(txtrBulle, // img src
                                     getBulleImg(matBulle[l][c]), //x pour récupérer la txt dans la source
                                     srcY,64,64, //Zone de "crop" de l'image de la source
-                                    centerXinit+radius*0.5+2*radius*c,radius*1.2+2*radius*l+ceilingIndex*2*radius, //position d'affichage sur le canvas
+                                    centerXinit+radius*0.5+2*radius*c,
+                                    radius*1.2+2*radius*l+ceilingIndex*2*radius-12*l, //position d'affichage sur le canvas
                                     radius*2,radius*2) //width et height sur le canvas
                 } else {
                     context.drawImage(txtrBulle, // img src
                                     getBulleImg(matBulle[l][c]), //x pour récupérer la txt dans la source
                                     srcY,64,64, //Zone de "crop" de l'image de la source
-                                    radius*1.5+centerXinit+2*radius*c,radius*1.2+2*radius*l+ceilingIndex*2*radius, //position d'affichage sur le canvas
+                                    radius*1.5+centerXinit+2*radius*c,
+                                    radius*1.2+2*radius*l+ceilingIndex*2*radius-12*l, //position d'affichage sur le canvas
                                     radius*2,radius*2) //width et height sur le canvas
                     }
            }
@@ -450,7 +479,8 @@ function affichageCanon(canon){
     context.drawImage(txtrBulle,
         getBulleImg(canon.courant.color),
         srcY,64,64,
-        canonXinit,canonYinit+2*radius,
+        centerXinit+2*radius*canon.courant.x,
+        centerYinit+2*radius*(canon.courant.y+ceilingIndex),
         radius*2,radius*2)
 
 
@@ -483,6 +513,7 @@ function launchBulle(matBulle, canon){
     ymax = 0;
     
     if(bubbleLaunched){
+        bubbleSticked.play();
         
         speed = speed*speed;
         //Déplacement en X : vérification du mur - pas de rebond
@@ -545,7 +576,7 @@ function launchBulle(matBulle, canon){
                     canon.courant.y +=1;
                 }
             }
-            gameOver(matBulle)
+            
             
             cluster = trouveCluster(matBulle,canon.courant,true)
             ;
@@ -558,12 +589,11 @@ function launchBulle(matBulle, canon){
                   
                 
             }
-            //sameVoisins(matBulle,canon.courant)
             clusterFlottant = findBullesFlottante(matBulle);
-            if (clusterFlottant != -1){ 
+           if (clusterFlottant != -1){ 
+                fallingBulle = true
                 score+= clusterFlottant.length*20
                 breakBulle(matBulle,clusterFlottant);
-                
             }
             if(checkVictory(matBulle)){
                 if (lvlIndex != tabLVL.length-1){
@@ -575,14 +605,14 @@ function launchBulle(matBulle, canon){
                     ceilingIndex = 0
                     round = 1;
                     timerLaunchB = Date.now()
-                    canon.courant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
-                    canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
+                    canon.courant = new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
+                    canon.suivant = new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
                 }    
             }
             else{
                 //Chargement du canon
                 canon.courant = canon.suivant;
-                canon.suivant = new Bulle(3.5,11,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
+                canon.suivant = new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
             }
         }
         
@@ -602,20 +632,10 @@ function afficherLaunchedBulle(canon){
                               getBulleImg(canon.courant.color),
                               srcY,64,64,
                               centerXinit+2*radius*canon.courant.x,
-                              centerYinit+2*radius*canon.courant.y,
-                              radius*2,radius*2);
-            /*
-            context.fillStyle = getBulleImg(canon.courant.color);
-            context.beginPath()
-            context.arc(centerXinit+2*radius*canon.courant.x,centerYinit+2*radius*canon.courant.y,radius,0,2 * Math.PI, false);
-            context.fill();
-            context.lineWidth = 5;
-            context.strokeStyle = '#003300';
-            context.stroke();
-            */
+                              centerYinit+2*radius*(canon.courant.y+ceilingIndex),
+                              radius*2,radius*2)
         }
 }
-
 function fallingBulleAnimation(cluster){
 
     if (fallingBulle){
@@ -634,7 +654,6 @@ function fallingBulleAnimation(cluster){
         }
     }
 }
-
 // Find floating clusters
 function findBullesFlottante(matBulles) {
 
@@ -666,7 +685,6 @@ function findBullesFlottante(matBulles) {
                 
                 if (floating) {
                     // Found a floating cluster
-                    fallingBulle = true;
                     for (let f = 0; f < currentCluster.length;f++){
                         clusterTrouves.push(currentCluster[f]);
                     }
@@ -766,24 +784,33 @@ function voisins(matBulle, bulle) {
     return tabVoisins;
 }
 function drawBackground(){
-    context.drawImage(bgimg,0,0)
+    context.drawImage(bgimg,0,0);
+}
+function drawGameOver(){
+    context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    context.fillRect(0,0,context.width,context.height);
+
+    context.fillStyle = 'yellow'
+    context.strokeStyle = '#003300';
+    context.font = '60px Helvetica';
+    context.strokeText('Game Over',context.width/4,context.height/2)
+    context.fillText('Game Over',context.width/4,context.height/2)
+    context.lineWidth = 4;
+}
+function afficherMenu(){
+    context.drawImage(logo,0,context.height/5,context.width,context.height/2);
+    
+    context.fillStyle = 'yellow'
+    context.strokeStyle = '#003300';
+    context.font = '30px Helvetica';
+    context.strokeText('Appuyer sur ENTER pour jouer',context.width/5,context.width)
+    context.fillText('Appuyer sur ENTER pour jouer',context.width/5,context.width)
+    context.lineWidth = 4;
+}
+
+function drawBorder(){
     context.drawImage(ceiling,0,800-radius-radius*2*ceilingIndex,WIDTH+radius,radius+radius*2*ceilingIndex,centerXinit-radius,0,WIDTH+2*radius,radius+radius*2*ceilingIndex,)
     context.drawImage(border,centerXinit-radius,0,WIDTH+radius,context.height)
-}
-function getRGBColor(char,alpha){
-    let couleurBulle;
-    switch(char){
-        case 'b': couleurBulle = 'rgb(0, 128, 255,'; break;
-        case 'v': couleurBulle = 'rgb(0, 204, 0,'; break;
-        case 'j': couleurBulle = 'rgb(255, 255, 0,'; break;
-        case 'r': couleurBulle = 'rgb(255, 51, 51,'; break;
-        case 'g': couleurBulle = 'rgb(192, 192, 192,'; break;
-        case 'o': couleurBulle = 'rgb(255, 153, 51,'; break;
-        case 'n': couleurBulle = 'rgb(32, 32, 32,'; break;
-        case 'p': couleurBulle = 'rgb(178, 102, 255,'; break;
-    }
-    return couleurBulle + alpha +')';
-    
 }
 function getCurrentTabColorBulles(matBulle){
 
@@ -826,7 +853,9 @@ function getBulleImg(char){
 function gameOver(matBulle){
     for (let i = 0;i<matBulle[0].length;i++){
         if ((matBulle[HEIGHTMAT-1-ceilingIndex][i] != '0') && (matBulle[HEIGHTMAT-1-ceilingIndex][i] != 'P')){
-            return true;
+            mainTheme.pause();
+            gmOver.play();
+            etatDuJeu = 'gameOver';
         }
     }
 }
