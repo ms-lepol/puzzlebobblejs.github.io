@@ -269,6 +269,7 @@ var canonYinit =  centerYinit+2*radius*(canon.courant.y-2);
 let speed = 0.5;
 let dir = convertToRadians(canon.angle);
 let vectdir = new Position(Math.cos(dir)*speed,speed*Math.sin(dir));
+let vectFleche = 0;
 
         
 // initialisation (appelée au chargement du corps du document <body onload="init">)    
@@ -387,8 +388,8 @@ function captureAppuiToucheClavier(event) {
     //  --> http://www.cambiaresearch.com/articles/15/javascript-key-codes
     if (etatDuJeu=='menu'&& event.code =='Enter'){
         etatDuJeu = 'jeu'
-        //readyGo.play();
-        actualTheme.play();
+        readyGo.play();
+        setTimeout(() => {actualTheme.play()},2500);
     }
     
     if (etatDuJeu=='jeu'){
@@ -402,11 +403,11 @@ function captureAppuiToucheClavier(event) {
             
         }
         if (event.code == 'ArrowLeft' && canon.angle <170){
-            canon.angle+=2;
+            vectFleche = 1;
         }
 
         if (event.code == 'ArrowRight' && canon.angle > 10 ){
-            canon.angle-=2;
+            vectFleche = -1;
         }
         if (event.code == 'PageUp' && srcY < 2560){
             srcY += 160;
@@ -414,6 +415,7 @@ function captureAppuiToucheClavier(event) {
         if (event.code == 'PageDown' && srcY > 0){
             srcY -= 160;
         }
+        canon.angle += vectFleche;
     }
 
 }
@@ -424,7 +426,7 @@ function captureAppuiToucheClavier(event) {
  */
 function captureRelacheToucheClavier(event) {
     if (event.code == 'ArrowLeft' || event.code == 'ArrowRight'){
-        canon.angle+=0;
+        vectFleche = 0;
     }
 } 
 
@@ -477,7 +479,7 @@ function affichageMatBulles(matBulle){
                                     radius*1.5+centerXinit+2*radius*c,
                                     radius*1.2+2*radius*l+ceilingIndex*2*radius-12*l, //position d'affichage sur le canvas
                                     radius*2,radius*2) //width et height sur le canvas
-                    }
+                }
            }
         }
     }
@@ -622,7 +624,7 @@ function launchBulle(matBulle, canon){
                     actualTheme.pause();
                     actualTheme.load();
                     clearing.play();
-                    actualTheme.play();
+                    setTimeout(() => {actualTheme.play()}, 3000);
                     ceilingIndex = 0
                     round = 1;
                     timerLaunchB = Date.now()
