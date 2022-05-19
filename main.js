@@ -195,21 +195,27 @@ var readyGo = new Audio("SoundAndMusic/readyGo.mp3");
 var bubbleSticked = new Audio("SoundAndMusic/bubbleSticked.mp3");
 var gmOver = new Audio("SoundAndMusic/gameOver.mp3"); 
 var clearing = new Audio("SoundAndMusic/clearing.mp3"); 
-var thirdTrack = new Audio("3rdTrack.mp3");
-var ATO = new Audio("ATO.mp3");
-var agonie = new Audio("agonie.mp3");
-var canicheEgorge = new Audio("canicheEgorge.mp3");
-var clusterMade = new Audio("clusterMade.mp3");
-var continuing = new Audio("continuing.mp3");
-var ending = new Audio("ending.mp3");
-var idkSound1 = new Audio("idkSound1.mp3");
-var idkSound2 = new Audio("idkSound2.mp3");
-var idkSound3 = new Audio("idkSound3.mp3");
-var Win = new Audio("idkWin.mp3");
-var winSound = new Audio("idkWin.mp3");
-var newLife = new Audio("newLife.mp3 ");
-var pieceMarioWish = new Audio("pieceMarioWish.mp3");
-var pufuiiiit = new Audio("pufuiiiit.mp3");
+var thirdTrack = new Audio("SoundAndMusic/3rdTrack.mp3");
+var ATO = new Audio("SoundAndMusic/ATO.mp3");
+var agonie = new Audio("SoundAndMusic/agonie.mp3");
+var canicheEgorge = new Audio("SoundAndMusic/canicheEgorge.mp3");
+var clusterMade = new Audio("SoundAndMusic/clusterMade.mp3");
+var continuing = new Audio("SoundAndMusic/continuing.mp3");
+var ending = new Audio("SoundAndMusic/ending.mp3");
+var idkSound1 = new Audio("SoundAndMusic/idkSound1.mp3");
+var idkSound2 = new Audio("SoundAndMusic/idkSound2.mp3");
+var idkSound3 = new Audio("SoundAndMusic/idkSound3.mp3");
+var Win = new Audio("SoundAndMusic/idkWin.mp3");
+var winSound = new Audio("SoundAndMusic/idkWin.mp3");
+var newLife = new Audio("SoundAndMusic/newLife.mp3 ");
+var pieceMarioWish = new Audio("SoundAndMusic/pieceMarioWish.mp3");
+var pufuiiiit = new Audio("SoundAndMusic/pufuiiiit.mp3");
+var logobi = new Audio("SoundAndMusic/logobi.mp3");
+var bassBoosted = new Audio("SoundAndMusic/bassBoosted.mp3");
+var remixDnB = new Audio("SoundAndMusic/remixDnB.mp3");
+
+var actualTheme = playTheme(); 
+actualTheme.volume = 0.3;
 
 //VARIABLE DE LA MATRICE
 const WIDTHMAT = 8;
@@ -300,8 +306,6 @@ function init() {
     // --> ces événements vont appeler les fonctions captureXYZ définies après.
                         
     // lancement de la boucle de jeu
-    readyGo.play();
-    mainTheme.play();
     boucleDeJeu();
 }
     
@@ -383,7 +387,8 @@ function captureAppuiToucheClavier(event) {
     //  --> http://www.cambiaresearch.com/articles/15/javascript-key-codes
     if (etatDuJeu=='menu'&& event.code =='Enter'){
         etatDuJeu = 'jeu'
-        mainTheme.play();
+        //readyGo.play();
+        actualTheme.play();
     }
     
     if (etatDuJeu=='jeu'){
@@ -423,6 +428,21 @@ function captureRelacheToucheClavier(event) {
     }
 } 
 
+function playTheme(){
+    let rdm = 10000*Math.random();
+
+    
+    if (rdm >=9999){
+        return logobi;
+    }
+    else if (rdm >= 9750){
+        return bassBoosted;
+    }
+    else if (rdm >= 5000){
+        return remixDnB;
+    }
+    return mainTheme;
+}
 
 //ENTREE : tableau de caractère qui définit la couleur que peux prendre la boule
 //Fonction qui renvoie un caractère aléatoire dans d'un tableau de caractère pour définir la couleur
@@ -577,31 +597,32 @@ function launchBulle(matBulle, canon){
                 }
             }
             
-            
             cluster = trouveCluster(matBulle,canon.courant,true)
             ;
             if (cluster.length>=3){
                 //breakingBulle = true;
                 
                 score+= cluster.length*10
+                pieceMarioWish.play();
              
                 breakBulle(matBulle,cluster);
                   
-                
             }
             clusterFlottant = findBullesFlottante(matBulle);
            if (clusterFlottant != -1){ 
                 fallingBulle = true
                 score+= clusterFlottant.length*20
+                pieceMarioWish.play();
                 breakBulle(matBulle,clusterFlottant);
             }
             if(checkVictory(matBulle)){
                 if (lvlIndex != tabLVL.length-1){
                     lvlIndex += 1;
                     nvActuel = tabLVL[lvlIndex];
-                    mainTheme.load();
+                    actualTheme.pause();
+                    actualTheme.load();
                     clearing.play();
-                    mainTheme.play();
+                    actualTheme.play();
                     ceilingIndex = 0
                     round = 1;
                     timerLaunchB = Date.now()
@@ -853,7 +874,7 @@ function getBulleImg(char){
 function gameOver(matBulle){
     for (let i = 0;i<matBulle[0].length;i++){
         if ((matBulle[HEIGHTMAT-1-ceilingIndex][i] != '0') && (matBulle[HEIGHTMAT-1-ceilingIndex][i] != 'P')){
-            mainTheme.pause();
+            actualTheme.pause();
             gmOver.play();
             etatDuJeu = 'gameOver';
         }
