@@ -217,6 +217,9 @@ var remixDnB = new Audio("SoundAndMusic/remixDnB.mp3");
 var actualTheme = playTheme(); 
 actualTheme.volume = 0.3;
 
+if (actualTheme == remixDnB){
+    actualTheme.volume = 0.1;
+}
 //VARIABLE DE LA MATRICE
 const WIDTHMAT = 8;
 const HEIGHTMAT = 12; 
@@ -332,7 +335,6 @@ function update(d) {
     lastD=d;
 
     if (etatDuJeu=='jeu'){
-        checkCeiling()
         launchBulle(nvActuel.matBulle, canon);
         if (d - timerLaunchB >=cdLaunchBulle){
             timerLaunchB=d
@@ -375,6 +377,9 @@ function render(d) {
     }
     if (etatDuJeu=='gameOver'){
         drawGameOver()
+    }
+    if (etatDuJeu == 'Victory'){
+        drawVictory();
     }
 } 
     
@@ -542,6 +547,7 @@ function launchBulle(matBulle, canon){
             newbubble.x = canon.courant.x + vectdir.x;
         }
         else{
+            idkSound2.play();
             //Rebond sur le mur de droite
             if (canon.courant.x + vectdir.x > xmax){
                 vectdir.x = -vectdir.x;
@@ -629,11 +635,14 @@ function launchBulle(matBulle, canon){
                     timerLaunchB = Date.now()
                     canon.courant = new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
                     canon.suivant = new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(nvActuel.matBulle)));
+                }
+                else{
+                    etatDuJeu = 'Victory';
                 }    
             }
             else{
-                //Chargement du canon
-                canon.courant = canon.suivant;
+                checkCeiling()
+                canon.courant = new Bulle(3.5,11-ceilingIndex,canon.suivant.color);
                 canon.suivant = new Bulle(3.5,11-ceilingIndex,getRandBulleColor(getCurrentTabColorBulles(matBulle)));
             }
         }
@@ -820,6 +829,18 @@ function drawGameOver(){
     context.fillText('Game Over',context.width/4,context.height/2)
     context.lineWidth = 4;
 }
+
+function drawVictory(){
+    context.fillStyle = 'rgba(255, 255, 25, 0.5)';
+    context.fillRect(0,0,context.width,context.height);
+
+    context.fillStyle = 'yellow'
+    context.strokeStyle = '#003300';
+    context.font = '60px Helvetica';
+    context.strokeText('Victory',context.width/3,context.height/2)
+    context.fillText('Victory',context.width/3,context.height/2)
+    context.lineWidth = 4;
+}
 function afficherMenu(){
     context.drawImage(logo,0,context.height/5,context.width,context.height/2);
     
@@ -899,6 +920,7 @@ function checkVictory(matBulle){
     return true;
     } 
 }
+
 function afficherScore(){
     context.fillStyle = 'white'
 
