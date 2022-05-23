@@ -676,7 +676,7 @@ function fallingBulleAnimation(cluster){
         }
     }
 }
-// Find floating clusters
+// Trouve les cluster de bulles sans attache
 function findBullesFlottante(matBulles) {
 
     let clusterTrouves = [];
@@ -686,7 +686,7 @@ function findBullesFlottante(matBulles) {
     for (let i=0; i<HEIGHTMAT; i++) {
         for (let j=0; j<WIDTHMAT; j++) {
             let bulle = new Bulle(j,i,matBulles[i][j]);
-                // Find all attached bulles
+                // On trouve toutes les bulles rattachees
             if (!findBulle(processed,bulle) && bulle.color!='0' && bulle.color!='P'){
                 currentCluster = trouveCluster(matBulles, bulle, false);
 
@@ -699,14 +699,14 @@ function findBullesFlottante(matBulles) {
                 let floating = true;
                 for (let k=0; k<currentCluster.length; k++) {
                     if (currentCluster[k].y == 0) {
-                        // bulle is attached to the roof
+                        // la bulle est accrochee au plafond
                         floating = false;
                         break;
                     }
                 }
                 
                 if (floating) {
-                    // Found a floating cluster
+                    // On en a trouve un 
                     for (let f = 0; f < currentCluster.length;f++){
                         clusterTrouves.push(currentCluster[f]);
                     }
@@ -722,10 +722,11 @@ function findBullesFlottante(matBulles) {
         return -1;
     }
 }
-// Find cluster at the specified tile location
+// Trouve un cluster de 3 (ou plus) bulles de meme couleur 
 function trouveCluster(matBulles, lance, sameColor){
  
-    // Initialize the toprocess array with the specified tile
+    // On cree un tableau toProcess qui va ajouter les bulles
+    // a verifier au fur et a mesure
     let toProcess = [lance];
     
     let clusterTrouve = [];
@@ -733,16 +734,16 @@ function trouveCluster(matBulles, lance, sameColor){
     let tabVoisins;
 
     while (toProcess.length > 0) {
-        // Pop the last element from the array
+        // On enleve le dernier element de toProcess
         let currentBulle = toProcess.pop();
         
-        // Skip processed and empty tiles
+        // On passe sans regarder les bulles processed et vides
         if (currentBulle.color == '0') {
             continue;
         }
-        // Check if current tile has the right type, if matchtype is true
+        // On regarde si elle a la meme couleur que celle recherchee
         if (!sameColor || (currentBulle.color == lance.color)) {
-            // Add current tile to the cluster
+            // On ajoute cette bulle au cluster final
             
             clusterTrouve.push(currentBulle);
  
@@ -755,7 +756,7 @@ function trouveCluster(matBulles, lance, sameColor){
         }
     }
  
-    // Return the found cluster
+    // On retourne le cluster trouve
     return clusterTrouve;
 }
 
@@ -771,11 +772,11 @@ function findBulle(tabBulle,bulle){
 }
 
 
-// Neighbor offset table
-var voisinsPairsImpairs = [[[1, 0], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1]], // Impairs row tiles
-                        [[-1, 0], [0, 1], [0, -1], [1, 0], [1, 1], [1, -1]]];  // pairs row tiles
+// tableau du decalage de la matrice 
+var voisinsPairsImpairs = [[[1, 0], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1]], // Impaire
+                        [[-1, 0], [0, 1], [0, -1], [1, 0], [1, 1], [1, -1]]];  // paire
  
-// Get the neighbors of the specified tile
+// Fonction permettant d'avoir les voisins d'une bulle specifiee
 function voisins(matBulle, bulle) {
     let rangeeBulle;
     if (matBulle[bulle.y][WIDTHMAT-1] == 'P'){ 
@@ -783,19 +784,19 @@ function voisins(matBulle, bulle) {
     }
     else {
         rangeeBulle = 0; 
-    } // Even or odd row
+    } // rangee paire ou impaire
     let tabVoisins = [];
     
-    // Get the neighbor offsets for the specified tile
+    // on prend le decalage de la rangee
     let n = voisinsPairsImpairs[rangeeBulle];
  
-    // Get the neighbors
+    // on prend le voisin
     for (let i=0; i<n.length; i++) {
-        // Neighbor coordinate
+        // ses coordonnes
         let nx = bulle.x + n[i][0];
         let ny = bulle.y + n[i][1];
  
-        // Make sure the tile is valid
+        // on verifie leur viabilite
         if (nx >= 0 && nx < WIDTHMAT && ny >= 0 && ny < HEIGHTMAT) {
             if(matBulle[ny][nx]!='0' && matBulle[ny][nx]!='P'){
                 tabVoisins.push(new Bulle(nx,ny,matBulle[ny][nx]));
