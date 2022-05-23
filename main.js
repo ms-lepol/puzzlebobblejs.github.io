@@ -389,6 +389,7 @@ function captureAppuiToucheClavier(event) {
     if (etatDuJeu=='menu'&& event.code =='Enter'){
         etatDuJeu = 'jeu'
         readyGo.play();
+        timerLaunchB = Date.now();
         setTimeout(() => {actualTheme.play()},2500);
     }
     
@@ -527,10 +528,8 @@ function checkCeiling(){
     }
 }
 function launchBulle(matBulle, canon){
-    var newbubble = new Position()
+    var newbubble = new Position(canon.courant.x,canon.courant.y)
     let matPos = new Position()
-    newbubble.x = canon.courant.x;
-    newbubble.y = canon.courant.y;
     xmax = WIDTHMAT;
     ymax = 0;
     
